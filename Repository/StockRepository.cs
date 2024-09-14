@@ -1,4 +1,5 @@
 ﻿using api.Data;
+using api.Dtos.Stock;
 using api.Interfaces;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -14,8 +15,52 @@ public class StockRepository : IStockRepository
         _context = context;
     }
 
-    public Task<List<Stock>> GetAllStocksAsync()
+    public async Task<List<Stock>> GetAllStocksAsync()
     {
-        return _context.Stocks.ToListAsync();
+        return await _context.Stocks.ToListAsync();
+    }
+
+    public async Task<Stock?> GetStockByIdAsync(int id)
+    {
+        return await _context.Stocks.FindAsync(id);
+    }
+
+    public async Task<Stock> CreateStockAsync(Stock stock)
+    {
+        await _context.Stocks.AddAsync(stock);
+        await _context.SaveChangesAsync();
+        return stock;
+    }
+
+    public async Task<Stock?> DeleteStockAsync(int id)
+    {
+        var stock = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
+        if (stock == null)
+        {
+            return null;
+        }
+
+        _context.Stocks.Remove(stock);
+        await _context.SaveChangesAsync();
+        return stock;
+    }
+
+    public async Task<Stock?> UpdateStockAsync(int id, UpdateStockRequestDto stockDto)
+    {
+        var existingStock = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
+        if (existingStock == null)
+        {
+            return null;
+        }
+
+        existingStock.Symbol = stockDto.Symbol;
+        existingStock.CompanyName = stockDto.CompanyName;
+        existingStock.Purchase = stockDto.Purchase;
+        existingStock.LastDividend = stockDto.LastDividend;
+        existingStock.Industry = stockDto.Industry;
+        existingStock.MarketCap = stockDto.MarketCap;
+
+        await _context.SaveChangesAsync();
+        return existingStock;
     }
 }
