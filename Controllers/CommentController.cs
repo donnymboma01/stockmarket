@@ -1,4 +1,5 @@
-﻿using api.Interfaces;
+﻿using api.Dtos.Comments;
+using api.Interfaces;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +10,12 @@ namespace api.Controllers;
 public class CommentController : ControllerBase
 {
     private readonly ICommentRepository _commentRepository;
+    private readonly IStockRepository _stockRepository;
 
-    public CommentController(ICommentRepository commentRepository)
+    public CommentController(ICommentRepository commentRepository, IStockRepository stockRepository)
     {
         _commentRepository = commentRepository;
+        _stockRepository = stockRepository;
     }
 
     [HttpGet]
@@ -34,5 +37,18 @@ public class CommentController : ControllerBase
         }
 
         return Ok(comment.ToCommentDto());
+    }
+
+    [HttpPost("{stockId}")]
+    public async Task<IActionResult> CreateComment([FromRoute] int stockId, [FromBody] CreateCommentRequestDto commentDto)
+    {
+        if (!await _stockRepository.StockExists(stockId))
+        {
+            return BadRequest("Stock does not exist");
+        }
+
+        var comment = commentDto.ToCommentFromCreateDTO(stockId);
+        await _commentRepository.CreateCommentAsync(comment);
+        return CreatedAtAction(nameof(GetCommentById), new { id = comment }, comment.ToCommentDto());
     }
 }

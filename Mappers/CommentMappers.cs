@@ -16,4 +16,15 @@ public static class CommentMappers
             CreatedOn = comment.CreatedOn,
         };
     }
+
+    public static Comment ToCommentFromCreateDTO(this CreateCommentRequestDto createCommentRequestDto, int  stockId)
+    {
+        return new Comment
+        {
+            Title = createCommentRequestDto.Title,
+            Content = createCommentRequestDto.Content,
+            // StockId = createCommentRequestDto.StockId
+            StockId = stockId
+        };
+    }
 }
