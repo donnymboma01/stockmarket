@@ -17,7 +17,7 @@ namespace api.Controllers
     {
         #region attributes
 
-        private readonly ApplicationDBContext _context; // plus besoin d'appeler ceci dans le constructeur.
+        // private readonly ApplicationDBContext _context; // plus besoin d'appeler ceci dans le constructeur.
         private readonly IStockRepository _stockRepository;
 
         #endregion
