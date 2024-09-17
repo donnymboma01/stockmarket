@@ -17,7 +17,7 @@ public static class CommentMappers
         };
     }
 
-    public static Comment ToCommentFromCreateDTO(this CreateCommentRequestDto createCommentRequestDto, int  stockId)
+    public static Comment ToCommentFromCreateDTO(this CreateCommentRequestDto createCommentRequestDto, int stockId)
     {
         return new Comment
         {
@@ -25,6 +25,15 @@ public static class CommentMappers
             Content = createCommentRequestDto.Content,
             // StockId = createCommentRequestDto.StockId
             StockId = stockId
+        };
+    }
+
+    public static Comment ToCommentFromUpdate(this UpdateCommentRequestDto commentRequestDto)
+    {
+        return new Comment
+        {
+            Title = commentRequestDto.Title,
+            Content = commentRequestDto.Content,
         };
     }
 }
