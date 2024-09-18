@@ -4717,11 +4717,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\Donny\\Desktop\\DONNY\\projects\\.net\\api\\api.csproj",
+      "projectUniqueName": "C:\\Users\\Donny\\Desktop\\DONNY\\projects\\.net\\api\\api.csproj",
       "projectName": "api",
-      "projectPath": "c:\\Users\\Donny\\Desktop\\DONNY\\projects\\.net\\api\\api.csproj",
+      "projectPath": "C:\\Users\\Donny\\Desktop\\DONNY\\projects\\.net\\api\\api.csproj",
       "packagesPath": "C:\\Users\\Donny\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\Donny\\Desktop\\DONNY\\projects\\.net\\api\\obj\\",
+      "outputPath": "C:\\Users\\Donny\\Desktop\\DONNY\\projects\\.net\\api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

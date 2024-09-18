@@ -21,6 +21,8 @@ public class CommentController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllComments()
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var comments = await _commentRepository.GetAllCommentsAsync();
         var commentDto = comments.Select(c => c.ToCommentDto());
         return Ok(commentDto);
@@ -29,6 +31,8 @@ public class CommentController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCommentById(int id)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var comment = await _commentRepository.GetByIdAsync(id);
 
         if (comment == null)
@@ -39,9 +43,12 @@ public class CommentController : ControllerBase
         return Ok(comment.ToCommentDto());
     }
 
-    [HttpPost("{stockId}")]
-    public async Task<IActionResult> CreateComment([FromRoute] int stockId, [FromBody] CreateCommentRequestDto commentDto)
+    [HttpPost("{stockId:int}")]
+    public async Task<IActionResult> CreateComment([FromRoute] int stockId,
+        [FromBody] CreateCommentRequestDto commentDto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         if (!await _stockRepository.StockExists(stockId))
         {
             return BadRequest("Stock does not exist");
@@ -53,9 +60,11 @@ public class CommentController : ControllerBase
     }
 
     [HttpPut]
-    [Route("{id}")]
+    [Route("{id:int}")]
     public async Task<IActionResult> UpdateComment([FromRoute] int id, [FromBody] UpdateCommentRequestDto commentDto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var comment = await _commentRepository.UpdateCommentAsync(id, commentDto.ToCommentFromUpdate());
 
         if (comment == null)
@@ -67,9 +76,11 @@ public class CommentController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("{id}")]
+    [Route("{id:int}")]
     public async Task<IActionResult> DeleteComment([FromRoute] int id)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var comment = await _commentRepository.DeleteCommentAsync(id);
 
         if (comment == null)
@@ -78,6 +89,5 @@ public class CommentController : ControllerBase
         }
 
         return Ok(comment.ToCommentDto());
-
     }
 }
