@@ -1,5 +1,6 @@
 ﻿using api.Data;
 using api.Dtos.Stock;
+using api.Helpers;
 using api.Interfaces;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -15,11 +16,23 @@ public class StockRepository : IStockRepository
         _context = context;
     }
 
-    public async Task<List<Stock>> GetAllStocksAsync()
+    public async Task<List<Stock>> GetAllStocksAsync(QueryObject queryObject)
     {
         // return await _context.Stocks.ToListAsync();
         // Include permet d'ajouter les commentaires dans la liste des stocks
-        return await _context.Stocks.Include(c => c.Comments).ToListAsync();
+        var stocks = _context.Stocks.Include(c => c.Comments).AsQueryable();
+        if (!string.IsNullOrWhiteSpace(queryObject.CompanyName))
+        {
+            stocks = stocks.Where(s => s.CompanyName.Contains(queryObject.CompanyName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryObject.Symbol))
+        {
+            stocks = stocks.Where(s => s.Symbol.Contains(queryObject.Symbol));
+        }
+
+        // return await _context.Stocks.Include(c => c.Comments).ToListAsync();
+        return await stocks.ToListAsync();
     }
 
     public async Task<Stock?> GetStockByIdAsync(int id)
